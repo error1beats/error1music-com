@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>error1 — you will find your way back...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   error1 — a corrupted dreamcore web-shrine
+   ============================================================ */
+:root{
+  --void:#07060f;
+  --void-2:#0c0a18;
+  --ink:#ECE7F6;
+  --dim:#7b7694;
+  --cyan:#5fe6dd;
+  --cyan-2:#36c9d8;
+  --rose:#ff5fa2;
+  --rose-2:#ff7db4;
+  --violet:#9a7bff;
+  --warn:#ff3b5c;
+  --line:rgba(95,230,221,.26);
+  --glow-cyan:rgba(95,230,221,.55);
+  --glow-rose:rgba(255,95,162,.55);
+  --term:'VT323',ui-monospace,monospace;
+  --type:'Special Elite','Courier New',monospace;
+  --pix:'Silkscreen',ui-monospace,monospace;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{background:var(--void)}
+body{
+  min-height:100vh;
+  font-family:var(--type);
+  color:var(--ink);
+  background:
+    radial-gradient(140% 120% at 50% -10%, #14102a 0%, #0a0816 42%, var(--void) 100%);
+  overflow-x:hidden;
+  cursor:crosshair;
+}
+a{color:inherit}
+img{display:block}
+
+/* ---------- atmosphere layers ---------- */
+.layer{position:fixed;inset:0;pointer-events:none}
+.stars{
+  z-index:0;
+  background-image:
+    radial-gradient(1.4px 1.4px at 24px 34px, rgba(255,255,255,.85), transparent),
+    radial-gradient(1px 1px at 96px 128px, rgba(95,230,221,.8), transparent),
+    radial-gradient(1.1px 1.1px at 168px 70px, rgba(255,95,162,.7), transparent),
+    radial-gradient(1.3px 1.3px at 210px 206px, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 50px 200px, rgba(154,123,255,.7), transparent);
+  background-size:240px 240px;
+  animation:drift 80s linear infinite;
+}
+.stars.two{
+  background-size:340px 340px;
+  opacity:.55;
+  animation:drift 140s linear infinite reverse, twinkle 6s ease-in-out infinite;
+}
+.grain{
+  z-index:1; opacity:.05; mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grainShift 1.2s steps(4) infinite;
+}
+.vignette{
+  z-index:48;
+  background:radial-gradient(120% 100% at 50% 38%, transparent 52%, rgba(0,0,0,.62) 100%);
+}
+.scanlines{
+  z-index:49; mix-blend-mode:multiply; opacity:.9;
+  background:repeating-linear-gradient(to bottom,
+    rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.22) 3px, rgba(0,0,0,.22) 3px);
+  background-size:100% 4px;
+}
+.sweep{
+  z-index:50;
+  background:linear-gradient(to bottom, transparent, rgba(95,230,221,.06) 48%, rgba(255,255,255,.05) 50%, transparent);
+  height:32%;
+  animation:sweep 9s linear infinite;
+}
+.flicker{
+  z-index:51;
+  background:rgba(120,230,255,.018);
+  animation:flicker 7.5s infinite;
+}
+
+@keyframes drift{from{background-position:0 0}to{background-position:240px 480px}}
+@keyframes twinkle{0%,100%{opacity:.55}50%{opacity:.2}}
+@keyframes grainShift{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}100%{transform:translate(0,0)}}
+@keyframes sweep{0%{transform:translateY(-40%)}100%{transform:translateY(330%)}}
+@keyframes flicker{0%,3%,6%,100%{opacity:.4}3.5%{opacity:.9}5%{opacity:.15}}
+
+/* ---------- shell ---------- */
+.shell{position:relative;z-index:5;max-width:860px;margin:0 auto;padding:0 16px 60px}
+
+/* ---------- marquee ---------- */
+.marquee{
+  position:relative;z-index:6;
+  border-block:1px solid var(--line);
+  background:linear-gradient(90deg, rgba(95,230,221,.05), rgba(255,95,162,.04));
+  overflow:hidden;white-space:nowrap;
+  box-shadow:0 0 24px rgba(95,230,221,.08) inset;
+}
+.marquee .track{
+  display:inline-block;padding:7px 0;white-space:nowrap;
+  font-family:var(--term);font-size:1.18rem;letter-spacing:.5px;
+  color:var(--cyan);text-shadow:0 0 8px var(--glow-cyan);will-change:transform;
+}
+.marquee .unit{display:inline-block}
+.marquee .sep{color:var(--dim);text-shadow:none;margin:0 .35em}
+.marquee .rose{color:var(--rose);text-shadow:0 0 8px var(--glow-rose)}
+.marquee .star{color:var(--violet);text-shadow:0 0 8px rgba(154,123,255,.6)}
+.marquee .warn{color:var(--warn);text-shadow:0 0 10px rgba(255,59,92,.7);animation:warnFlicker 2.6s infinite}
+@keyframes warnFlicker{0%,100%{opacity:1}47%{opacity:1}48%{opacity:.25}50%{opacity:1}92%{opacity:.4}94%{opacity:1}}
+
+/* ---------- image strip ---------- */
+.strip{
+  position:relative;z-index:6;overflow:hidden;
+  padding:14px 0;border-bottom:1px solid rgba(95,230,221,.12);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.strip.bottom{border-top:1px solid rgba(95,230,221,.12);border-bottom:none;margin-top:34px}
+.strip .reel{display:flex;width:max-content;will-change:transform}
+.strip .reel-set{display:flex;flex:0 0 auto}
+.strip img{
+  height:96px;width:auto;max-width:170px;object-fit:cover;margin-right:12px;flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.12);border-radius:2px;
+  filter:grayscale(.35) brightness(.82) contrast(1.05);
+  transition:filter .3s, transform .3s, box-shadow .3s, border-color .3s;
+  opacity:.9;
+}
+.strip img:hover{
+  filter:none;transform:scale(1.06) rotate(-1deg);opacity:1;
+  border-color:var(--rose);
+  box-shadow:0 0 22px var(--glow-rose);
+  z-index:2;position:relative;
+}
+
+/* ---------- nav ---------- */
+nav{
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+  margin:30px auto 22px;
+}
+nav a{
+  font-family:var(--pix);font-size:.72rem;text-decoration:none;
+  color:var(--dim);letter-spacing:1px;
+  padding:9px 16px;border:1px solid rgba(123,118,148,.4);border-radius:2px;
+  background:rgba(12,10,24,.5);
+  transition:.18s;position:relative;overflow:hidden;
+}
+nav a::before{content:"[ "}
+nav a::after{content:" ]"}
+nav a:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 16px rgba(95,230,221,.3);transform:translateY(-2px)}
+nav a.active{
+  color:var(--void);background:var(--cyan);border-color:var(--cyan);
+  text-shadow:none;box-shadow:0 0 22px var(--glow-cyan);
+}
+
+/* ---------- window / CRT panel ---------- */
+.window{
+  position:relative;
+  background:linear-gradient(180deg, rgba(14,12,28,.78), rgba(8,7,18,.86));
+  border:1px solid var(--line);
+  border-radius:5px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 60px rgba(95,230,221,.1), 0 30px 80px rgba(0,0,0,.6);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  overflow:hidden;
+}
+.window::after{ /* inner scanline veil */
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:5px;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.10) 3px 3px);
+  background-size:100% 4px;opacity:.5;
+}
+.titlebar{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;
+  background:linear-gradient(90deg, rgba(95,230,221,.14), rgba(154,123,255,.1), rgba(255,95,162,.12));
+  border-bottom:1px solid var(--line);
+  font-family:var(--pix);font-size:.6rem;letter-spacing:1px;color:var(--ink);
+}
+.dots{display:flex;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.dot.r{background:var(--rose);box-shadow:0 0 8px var(--glow-rose)}
+.dot.y{background:#f7d154;box-shadow:0 0 8px rgba(247,209,84,.6)}
+.dot.g{background:var(--cyan);box-shadow:0 0 8px var(--glow-cyan)}
+.tbpath{opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbctl{margin-left:auto;display:flex;gap:7px}
+.tbctl button{
+  font-family:var(--pix);font-size:.55rem;color:var(--dim);
+  background:rgba(0,0,0,.25);border:1px solid rgba(123,118,148,.4);
+  width:20px;height:18px;line-height:1;border-radius:2px;cursor:pointer;transition:.15s;
+}
+.tbctl button:hover{color:var(--ink);border-color:var(--ink)}
+.panel-body{padding:38px 28px 42px;min-height:340px}
+
+/* glitch shake on view change */
+.window.glitching{animation:panelGlitch .5s steps(2) 1}
+@keyframes panelGlitch{
+  0%{transform:translate(0,0);filter:none}
+  20%{transform:translate(-3px,1px);filter:hue-rotate(20deg) saturate(1.4)}
+  40%{transform:translate(3px,-1px) skewX(-1deg);filter:hue-rotate(-25deg)}
+  60%{transform:translate(-2px,0);filter:none}
+  100%{transform:translate(0,0)}
+}
+
+/* ---------- views & headings ---------- */
+.view{display:none;animation:fadeUp .55s ease both}
+.view.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.glitch{
+  position:relative;font-family:var(--term);
+  font-size:clamp(2rem,7vw,3.6rem);line-height:.95;margin:0 0 6px;
+  color:var(--ink);text-shadow:0 0 22px var(--glow-cyan);
+}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;inset:0;pointer-events:none;
+}
+.glitch::before{color:var(--rose);transform:translate(-2px,0);mix-blend-mode:screen;animation:gl1 3.6s infinite steps(3)}
+.glitch::after{color:var(--cyan);transform:translate(2px,0);mix-blend-mode:screen;animation:gl2 3.2s infinite steps(3)}
+@keyframes gl1{
+  0%,100%{clip-path:inset(0 0 0 0);transform:translate(-2px,0)}
+  20%{clip-path:inset(0 0 72% 0);transform:translate(-5px,0)}
+  40%{clip-path:inset(58% 0 18% 0);transform:translate(3px,0)}
+  60%{clip-path:inset(20% 0 56% 0);transform:translate(-4px,0)}
+}
+@keyframes gl2{
+  0%,100%{clip-path:inset(0 0 0 0);transform:translate(2px,0)}
+  25%{clip-path:inset(64% 0 12% 0);transform:translate(5px,0)}
+  50%{clip-path:inset(10% 0 70% 0);transform:translate(-3px,0)}
+  75%{clip-path:inset(40% 0 34% 0);transform:translate(4px,0)}
+}
+.sub{
+  font-family:var(--term);font-size:clamp(1.3rem,3.6vw,1.9rem);
+  color:var(--rose);text-shadow:0 0 14px var(--glow-rose);
+  margin:0 0 22px;
+}
+
+/* prose */
+.prose{font-size:1.06rem;line-height:1.95;color:#d8d3ea}
+.prose p{margin:0 0 2px;opacity:0;animation:lineIn .5s ease forwards}
+.prose .ellipsis{color:var(--cyan);letter-spacing:4px}
+.prose .soon{color:var(--violet);text-shadow:0 0 12px rgba(154,123,255,.6);animation:warnFlicker 3.4s infinite}
+.caret{display:inline-block;width:.6ch;background:var(--cyan);color:transparent;animation:blink 1.05s steps(1) infinite;box-shadow:0 0 10px var(--glow-cyan)}
+@keyframes lineIn{to{opacity:1}}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ---------- music ---------- */
+.now{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--pix);font-size:.62rem;letter-spacing:1px;color:var(--cyan);
+  margin-bottom:14px;
+}
+.eq{display:inline-flex;gap:3px;align-items:flex-end;height:18px}
+.eq i{width:3px;background:var(--cyan);box-shadow:0 0 6px var(--glow-cyan);animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.2s}
+.eq i:nth-child(3){animation-delay:.4s}
+.eq i:nth-child(4){animation-delay:.1s}
+.eq i:nth-child(5){animation-delay:.3s}
+@keyframes eq{0%,100%{height:4px}50%{height:18px}}
+.player{
+  border:1px solid var(--line);border-radius:4px;overflow:hidden;
+  box-shadow:0 0 28px rgba(255,95,162,.12);background:#0a0a12;
+}
+.player iframe{display:block;width:100%;border:0}
+.track-credit{margin-top:10px;font-family:var(--pix);font-size:.55rem;color:var(--dim);line-height:1.7}
+.track-credit a{color:var(--cyan-2);text-decoration:none}
+.track-credit a:hover{text-decoration:underline}
+
+/* ---------- links ---------- */
+.linklist{display:grid;gap:14px;margin-top:6px;max-width:460px}
+.lnk{
+  display:flex;align-items:center;gap:14px;text-decoration:none;
+  padding:16px 18px;border:1px solid rgba(95,230,221,.28);border-radius:3px;
+  background:linear-gradient(90deg, rgba(95,230,221,.05), transparent);
+  font-family:var(--term);font-size:1.5rem;color:var(--ink);
+  transition:.2s;position:relative;overflow:hidden;
+}
+.lnk .ic{font-size:1.1rem}
+.lnk .arr{margin-left:auto;color:var(--dim);transition:.2s}
+.lnk:hover{border-color:var(--rose);color:var(--rose-2);box-shadow:0 0 26px var(--glow-rose);transform:translateX(6px)}
+.lnk:hover .arr{color:var(--rose);transform:translateX(4px)}
+.lnk.dead{opacity:.5;cursor:not-allowed;border-style:dashed}
+.lnk.dead:hover{transform:none;border-color:rgba(154,123,255,.5);color:var(--violet);box-shadow:0 0 18px rgba(154,123,255,.25)}
+.lnk small{font-family:var(--pix);font-size:.5rem;letter-spacing:1px;color:var(--violet);margin-left:auto}
+
+/* ---------- footer ---------- */
+footer{margin-top:40px;text-align:center;color:var(--dim);font-family:var(--pix);font-size:.58rem;letter-spacing:1px;line-height:2.2}
+.wordmark{font-family:var(--term);font-size:2.2rem;color:var(--ink);text-shadow:0 0 18px var(--glow-cyan);letter-spacing:2px}
+.wordmark .c{display:inline-block;width:.5ch;background:var(--cyan);animation:blink 1.05s steps(1) infinite}
+.counter{display:inline-flex;gap:3px;margin:0 6px;vertical-align:middle}
+.counter b{
+  font-family:var(--term);font-size:1rem;font-weight:400;
+  background:#05040c;color:var(--cyan);border:1px solid rgba(95,230,221,.35);
+  padding:1px 5px;border-radius:2px;text-shadow:0 0 8px var(--glow-cyan);
+}
+.clock{color:var(--cyan-2)}
+.heart{color:var(--rose);text-shadow:0 0 8px var(--glow-rose)}
+.totop{color:var(--dim);text-decoration:none}
+.totop:hover{color:var(--cyan)}
+
+/* ---------- cursor particles ---------- */
+.spark{position:fixed;z-index:60;pointer-events:none;font-size:13px;will-change:transform,opacity;animation:floatUp 1s ease-out forwards}
+@keyframes floatUp{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-150%) scale(.4)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:560px){
+  .panel-body{padding:30px 18px 34px}
+  .strip img{height:74px;max-width:130px}
+  .marquee .track{font-size:1rem}
+  .lnk{font-size:1.25rem;padding:14px}
+  .tbpath{font-size:.52rem}
+  .player iframe{height:340px}
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  .stars,.stars.two,.grain,.sweep,.flicker{animation:none}
+  .glitch::before,.glitch::after{animation:none}
+  .window.glitching{animation:none}
+  .eq i{animation:none;height:12px}
+  .prose p{opacity:1;animation:none}
+  .caret,.wordmark .c{animation:none}
+  .spark{display:none}
+  .warn,.soon{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- atmosphere -->
+<div class="layer stars"></div>
+<div class="layer stars two"></div>
+<div class="layer grain"></div>
+<div class="layer vignette"></div>
+<div class="layer scanlines"></div>
+<div class="layer sweep"></div>
+<div class="layer flicker"></div>
+
+<!-- scrolling cryptic banner -->
+<div class="marquee"><span class="track" id="marquee"></span></div>
+
+<!-- top image strip -->
+<div class="strip" id="strip-top"><div class="reel"></div></div>
+
+<div class="shell">
+
+  <!-- navigation -->
+  <nav>
+    <a data-view="home"  href="#home">home</a>
+    <a data-view="music" href="#music">music</a>
+    <a data-view="links" href="#links">links</a>
+  </nav>
+
+  <!-- window -->
+  <div class="window" id="window">
+    <div class="titlebar">
+      <span class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></span>
+      <span class="tbpath" id="tbpath">C:\dreams\error1\home.exe</span>
+      <span class="tbctl">
+        <button title="not now" aria-label="minimize">_</button>
+        <button title="never enough" aria-label="maximize">▢</button>
+        <button id="btn-close" title="there is no exit" aria-label="close">×</button>
+      </span>
+    </div>
+
+    <div class="panel-body">
+
+      <!-- HOME -->
+      <section class="view" id="view-home">
+        <h1 class="glitch" data-text="you will find your way back...">you will find your way back...</h1>
+        <div class="prose">
+          <p>i made this site to post my music</p>
+          <p>and to act as a hub for my other pages</p>
+          <p>maybe someday i will post something else</p>
+          <p class="ellipsis">...</p>
+          <p>for now though</p>
+          <p>just music and links</p>
+          <p><span class="soon">extraordinary!</span><span class="caret">_</span></p>
+        </div>
+      </section>
+
+      <!-- MUSIC -->
+      <section class="view" id="view-music">
+        <h1 class="glitch" data-text="you will find your way back...">you will find your way back...</h1>
+        <p class="sub">i made this for you...</p>
+        <div class="now">
+          <span class="eq"><i></i><i></i><i></i><i></i><i></i></span>
+          NOW&nbsp;PLAYING — error1
+        </div>
+        <div class="player">
+          <iframe width="100%" height="460" scrolling="no" frameborder="no" allow="autoplay"
+            loading="lazy"
+            src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Ferror1-188244157%2Fsomething-new&color=%23ff5fa2&auto_play=false&...&visual=true"></iframe>
+        </div>
+        <div class="track-credit">
+          <a href="https://soundcloud.com/error1-188244157" target="_blank" rel="noopener">error1</a> ·
+          <a href="https://soundcloud.com/error1-188244157/something-new" target="_blank" rel="noopener">something new?</a>
+        </div>
+      </section>
+
+      <!-- LINKS -->
+      <section class="view" id="view-links">
+        <h1 class="glitch" data-text="you will find your way back...">you will find your way back...</h1>
+        <div class="linklist">
+          <a class="lnk" href="https://soundcloud.com/error1-188244157" target="_blank" rel="noopener">
+            <span class="ic">☁</span> SoundCloud <span class="arr">→</span>
+          </a>
+          <a class="lnk" href="https://www.youtube.com/@error1music" target="_blank" rel="noopener">
+            <span class="ic">▶</span> YouTube <span class="arr">→</span>
+          </a>
+          <a>
+          <a class="lnk" href="https://open.spotify.com/artist/1MckYRgk8ZzS1tpcVnbLqv?si=SX_CMp94Try288bD8JB5yA" title="spotify soon???">
+            <span class="ic">♫</span> Spotify <span class="arr">→</span>
+          </a>
+          </span>
+        </div>
+      </section>
+
+    </div><!-- /panel-body -->
+  </div><!-- /window -->
+
+  <!-- bottom image strip -->
+  <div class="strip bottom rev" id="strip-bottom"><div class="reel"></div></div>
+
+  <!-- footer -->
+  <footer>
+    <div class="wordmark">error1<span class="c">_</span></div>
+    <div>you are dreamer no.
+      <span class="counter" id="counter"></span>
+    </div>
+    <div><span class="clock" id="clock">--:--:--</span> · <span id="datestr"></span></div>
+    <div>best experienced at 3am &nbsp;·&nbsp; made with <span class="heart">&lt;3</span> &nbsp;·&nbsp; est. 2025</div>
+    <div><a class="totop" href="#home" id="totop">[ back to the top ]</a></div>
+  </footer>
+
+</div><!-- /shell -->
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var IMG = "https://error1beats.github.io/error1site1/images/side-image";
+  var GIFS = {5:1,8:1,33:1,43:1};
+  function ext(n){ return GIFS[n] ? "gif" : "jpg"; }
+
+  /* ---- seamless infinite scroller (measured + WAAPI-driven) -----------------
+     Lays down enough copies of a "unit" to always overflow the viewport, then
+     animates by EXACTLY one unit-width so the loop never shows blank space on
+     any screen size (phone -> ultrawide). Re-measures on resize + on image load. */
+  function makeScroller(host, makeUnit, opts){
+    var el = host.querySelector('.track') || host.querySelector('.reel');
+    var anim = null, paused = false, advance = 0;
+    function stop(){ if(anim){ try{ anim.cancel(); }catch(e){} anim = null; } }
+    function measure(){
+      stop(); el.style.transform = 'none'; el.innerHTML = '';
+      el.appendChild(makeUnit()); el.appendChild(makeUnit());
+      if(el.children.length < 2){ advance = 0; return; }
+      // distance between the start of unit #1 and unit #2 = exact width of one unit
+      advance = el.children[1].getBoundingClientRect().left
+              - el.children[0].getBoundingClientRect().left;
+    }
+    function run(){
+      if(advance < 4) return;            // not laid out / not loaded yet
+      stop();
+      if(reduce){                        // accessible fallback: no autoplay, user scrolls
+        el.innerHTML = ''; el.appendChild(makeUnit());
+        host.style.overflowX = 'auto'; el.style.transform = 'none'; return;
+      }
+      var copies = Math.max(3, Math.ceil(window.innerWidth / advance) + 2);
+      el.innerHTML = '';
+      var frag = document.createDocumentFragment();
+      for(var i = 0; i < copies; i++) frag.appendChild(makeUnit());
+      el.appendChild(frag);
+      anim = el.animate(
+        [{ transform: 'translateX(0px)' }, { transform: 'translateX(' + (-advance) + 'px)' }],
+        { duration: (advance / opts.speed) * 1000, iterations: Infinity,
+          easing: 'linear', direction: opts.reverse ? 'reverse' : 'normal' }
+      );
+      if(paused) anim.pause();
+    }
+    function refresh(){ measure(); run(); }
+    host.addEventListener('mouseenter', function(){ paused = true; if(anim) anim.pause(); });
+    host.addEventListener('mouseleave', function(){ paused = false; if(anim) anim.play(); });
+    var rz = null;
+    window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(refresh, 180); });
+    return { refresh: refresh };
+  }
+
+  /* ---- marquee (preserves the original cryptic text verbatim) ---- */
+  function seg(text, cls){ return cls ? '<span class="'+cls+'">'+text+'</span>' : '<span>'+text+'</span>'; }
+  var SEP = '<span class="sep">—</span>';
+  var unitHTML = [
+    seg('*******^error1^*******','star'),
+    seg('you will find your way back...'),
+    seg('still dreaming?'),
+    seg('hold on'),
+    seg('can you still feel it?'),
+    seg('WHEN WILL THEY LEARN?','warn'),
+    seg('XoXoXoXo <span class="rose">&lt;3</span>'),
+    seg('maybe one day they will understand, but that day is not today'),
+    seg('I <span class="rose">&lt;3</span> U'),
+    seg('nOeGO')
+  ].join('&nbsp;'+SEP+'&nbsp;') + '&nbsp;'+SEP+'&nbsp;'; // trailing sep => even spacing between copies
+  function marqueeUnit(){ var s = document.createElement('span'); s.className = 'unit'; s.innerHTML = unitHTML; return s; }
+  var marquee = makeScroller(document.querySelector('.marquee'), marqueeUnit, { speed: 38, reverse: false });
+  marquee.refresh(); // text measures synchronously
+
+  /* ---- image strips (hotlinks the original curated images) ---- */
+  function imageSetFactory(nums){
+    return function(){
+      var set = document.createElement('span'); set.className = 'reel-set';
+      for(var i = 0; i < nums.length; i++){
+        var img = new Image();
+        img.src = IMG + nums[i] + '.' + ext(nums[i]);
+        img.alt = ''; img.draggable = false; img.loading = 'eager';
+        img.onerror = function(){ this.style.display = 'none'; };
+        set.appendChild(img);
+      }
+      return set;
+    };
+  }
+  var TOP = [1,2,3,4,5,6,7,9,10,11,12,16,17,18];
+  var BOT = [13,14,15,19,20,21,33,34,35,36,40,42,43,30];
+  var topReel = makeScroller(document.getElementById('strip-top'),    imageSetFactory(TOP), { speed: 34, reverse: false });
+  var botReel = makeScroller(document.getElementById('strip-bottom'), imageSetFactory(BOT), { speed: 28, reverse: true  });
+  function refreshStrips(){ topReel.refresh(); botReel.refresh(); }
+  // image widths are only known once the pictures load, so re-measure as they arrive
+  (function(){
+    var nums = TOP.concat(BOT), deb = null;
+    function ping(){ clearTimeout(deb); deb = setTimeout(refreshStrips, 120); }
+    for(var i = 0; i < nums.length; i++){ var im = new Image(); im.onload = im.onerror = ping; im.src = IMG + nums[i] + '.' + ext(nums[i]); }
+  })();
+  window.addEventListener('load', function(){ setTimeout(refreshStrips, 60); });
+  refreshStrips();                       // best effort (covers cached images)
+  setTimeout(refreshStrips, 500);        // safety net
+
+  /* ---- view routing ---- */
+  var PATHS = {
+    home:  'C:\\dreams\\error1\\home.exe',
+    music: 'C:\\dreams\\error1\\for_you.wav',
+    links: 'C:\\dreams\\error1\\elsewhere.lnk'
+  };
+  var ORDER = ['home','music','links'];
+  var navLinks = document.querySelectorAll('nav a');
+  var views = { home:document.getElementById('view-home'),
+                music:document.getElementById('view-music'),
+                links:document.getElementById('view-links') };
+  var win = document.getElementById('window');
+  var current = null;
+
+  function showView(name, push){
+    if(!views[name]) name='home';
+    if(name===current) return;
+    current = name;
+    for(var k in views){
+      var on = (k===name);
+      views[k].classList.toggle('show', on);
+    }
+    navLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('data-view')===name); });
+    document.getElementById('tbpath').textContent = PATHS[name];
+    // re-trigger entry + glitch
+    var v = views[name];
+    v.style.animation='none'; void v.offsetWidth; v.style.animation='';
+    if(!reduce){
+      win.classList.remove('glitching'); void win.offsetWidth; win.classList.add('glitching');
+      setTimeout(function(){ win.classList.remove('glitching'); }, 520);
+    }
+    if(push && location.hash !== '#'+name){ history.pushState(null,'','#'+name); }
+  }
+
+  navLinks.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      showView(a.getAttribute('data-view'), true);
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+  window.addEventListener('hashchange', function(){
+    showView((location.hash||'#home').slice(1), false);
+  });
+  // keyboard left/right to flip pages
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'){
+      var i = ORDER.indexOf(current);
+      i = (i + (e.key==='ArrowRight'?1:ORDER.length-1)) % ORDER.length;
+      showView(ORDER[i], true);
+    }
+  });
+  document.getElementById('totop').addEventListener('click', function(e){
+    e.preventDefault(); showView('home', true); window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  // playful dead-end on the close button
+  document.getElementById('btn-close').addEventListener('click', function(){
+    var path = document.getElementById('tbpath');
+    var keep = path.textContent;
+    path.textContent = 'nOeGO :: there is no exit';
+    if(!reduce){ win.classList.add('glitching'); setTimeout(function(){win.classList.remove('glitching');},500); }
+    setTimeout(function(){ path.textContent = keep; }, 1400);
+  });
+
+  // initial view from hash
+  showView((location.hash||'#home').slice(1), false);
+
+  /* ---- live clock + date ---- */
+  function pad(n){ return (n<10?'0':'')+n; }
+  function tick(){
+    var d=new Date();
+    document.getElementById('clock').textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  }
+  tick(); setInterval(tick,1000);
+  try{
+    document.getElementById('datestr').textContent =
+      new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  }catch(e){ document.getElementById('datestr').textContent=''; }
+
+  /* ---- decorative hit counter (animated, no storage) ---- */
+  (function(){
+    var target = 24817, digits = String(target).padStart(6,'0').length;
+    var box = document.getElementById('counter');
+    var cells = [];
+    for(var i=0;i<6;i++){ var b=document.createElement('b'); b.textContent='0'; box.appendChild(b); cells.push(b); }
+    if(reduce){ var s=String(target).padStart(6,'0'); for(var j=0;j<6;j++) cells[j].textContent=s[j]; return; }
+    var start=null, dur=1600;
+    function frame(t){
+      if(!start) start=t;
+      var p=Math.min((t-start)/dur,1);
+      var eased=1-Math.pow(1-p,3);
+      var val=Math.floor(eased*target);
+      var s=String(val).padStart(6,'0');
+      for(var k=0;k<6;k++) cells[k].textContent=s[k];
+      if(p<1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ---- sparkle / heart cursor trail ---- */
+  if(!reduce && !('ontouchstart' in window)){
+    var glyphs=['✦','✧','♥','+','·'];
+    var colors=['var(--cyan)','var(--rose)','var(--violet)','#fff'];
+    var lastX=0,lastY=0,acc=0;
+    document.addEventListener('mousemove', function(e){
+      acc += Math.abs(e.clientX-lastX)+Math.abs(e.clientY-lastY);
+      lastX=e.clientX; lastY=e.clientY;
+      if(acc<26) return; acc=0;
+      var s=document.createElement('span');
+      s.className='spark';
+      s.textContent=glyphs[(Math.random()*glyphs.length)|0];
+      s.style.left=e.clientX+'px'; s.style.top=e.clientY+'px';
+      s.style.color=colors[(Math.random()*colors.length)|0];
+      s.style.textShadow='0 0 8px currentColor';
+      document.body.appendChild(s);
+      setTimeout(function(){ s.remove(); }, 1000);
+    }, {passive:true});
+  }
+})();
+</script>
+</body>
+</html>
