@@ -331,6 +331,14 @@ footer{margin-top:40px;text-align:center;color:var(--dim);font-family:var(--pix)
   .spark{display:none}
   .warn,.soon{animation:none}
 }
+/* ---------- whispers (conflicting inner voices) ---------- */
+#whispers{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.whisper{
+  position:absolute;font-family:var(--type);line-height:1.12;white-space:nowrap;
+  opacity:0;transform:translate(-50%,-50%);will-change:opacity;letter-spacing:.4px;
+}
+.whisper.up{color:#ff8fc0;text-shadow:0 0 18px rgba(255,95,162,.35)}
+.whisper.down{color:#948fb0;text-shadow:0 0 14px rgba(150,150,190,.22)}
 </style>
 </head>
 <body>
@@ -661,6 +669,111 @@ footer{margin-top:40px;text-align:center;color:var(--dim);font-family:var(--pix)
       document.body.appendChild(s);
       setTimeout(function(){ s.remove(); }, 1000);
     }, {passive:true});
+  }
+})();
+</script>
+
+<script>
+/* ===========================================================================
+   whispers — contradictory inner voices that fade in and out around the page,
+   each at its own random size, position, and (different every time) speed.
+   Sits at z-index 3, behind the content window, drifting through the margins
+   and as faint ghosts behind the glass.
+   =========================================================================== */
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // an even tug-of-war: the inner critic vs. the encouraging voice
+  var DOUBT = [
+    "you're not good enough...",
+    "no one cares...",
+    "you'll never finish this",
+    "who do you think you are?!",
+    "you'll never make it home",
+    "you've already lost!",
+    "it's too late to start",
+    "just give up",
+    "you don't belong here",
+    "this isn't working...",
+    "you always quit!",
+    "why even try?"
+  ];
+  var FAITH = [
+    "you'll get there soon",
+    "keep going...",
+    "you're closer than you think",
+    "can you remember how it felt?",
+    "somewhere is better than this...",
+    "one more try",
+    "do you feel it too?",
+    "you're on your way to happiness",
+    "it stil exists somewhere...",
+    "you've come so far",
+    "don't forget where you were!",
+    "you'll be better"
+  ];
+
+  var layer = document.createElement('div');
+  layer.id = 'whispers';
+  document.body.appendChild(layer);
+
+  function rand(min, max){ return min + Math.random() * (max - min); }
+  function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+
+  // how many breathe at once, scaled to the screen
+  function capacity(){
+    var n = Math.round((window.innerWidth * window.innerHeight) / 200000);
+    return Math.max(4, Math.min(10, n));
+  }
+
+  function spawn(){
+    var up = Math.random() < 0.5;                 // 50/50 doubt vs. faith
+    var el = document.createElement('div');
+    el.className = 'whisper ' + (up ? 'up' : 'down');
+    el.textContent = up ? pick(FAITH) : pick(DOUBT);
+
+    el.style.fontSize  = rand(0.85, 3.6).toFixed(2) + 'rem';
+    el.style.left      = rand(11, 89).toFixed(2) + '%';
+    el.style.top       = rand(9, 91).toFixed(2) + '%';
+    el.style.transform = 'translate(-50%,-50%) rotate(' + rand(-3, 3).toFixed(1) + 'deg)';
+    layer.appendChild(el);
+
+    // every cycle gets its own slow, different timing
+    var fadeIn  = rand(2200, 5500);
+    var hold    = rand(400, 3000);
+    var fadeOut = rand(2800, 6500);
+    var peak    = rand(0.16, 0.5);
+    if(reduce){ fadeIn = 9000; hold = 4000; fadeOut = 9000; peak = 0.18; } // calm, no big swings
+    var total = fadeIn + hold + fadeOut;
+
+    var anim = el.animate(
+      [
+        { opacity: 0 },
+        { opacity: peak, offset: fadeIn / total },
+        { opacity: peak, offset: (fadeIn + hold) / total },
+        { opacity: 0 }
+      ],
+      { duration: total, easing: 'ease-in-out', fill: 'forwards' }
+    );
+    // when one finishes, it disappears and a fresh one takes its place after a gap
+    anim.onfinish = function(){
+      el.remove();
+      setTimeout(spawn, reduce ? rand(2200, 5200) : rand(300, 2600));
+    };
+  }
+
+  function start(){
+    var n = reduce ? Math.min(3, capacity()) : capacity();
+    for(var i = 0; i < n; i++){
+      setTimeout(spawn, rand(0, reduce ? 6000 : 4000)); // stagger so they don't pulse in unison
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
   }
 })();
 </script>
